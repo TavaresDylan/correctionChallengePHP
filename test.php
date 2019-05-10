@@ -1,12 +1,5 @@
 <?php
-$test = 'test';
 
-var_dump($test);
 
-function bidon()
-{
-	global $test;
-	var_dump($test);
-}
+var_dump($_SERVER['REQUEST_SCHEME']);
 
-bidon();

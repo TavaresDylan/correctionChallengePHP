@@ -9,7 +9,7 @@ require_once 'config.php';
 function uri($cible="")//:string
 {
 	global $racine; //Permet de récupérer une variable externe à la fonction
-	$uri = "http://".$_SERVER['HTTP_HOST']; 
+	$uri = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['HTTP_HOST']; 
 	$folder = "";
 	if(!$racine) {
 		$folder = basename(dirname(dirname(__FILE__))).'/'; //Dossier courant
