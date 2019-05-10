@@ -109,7 +109,7 @@ function userConnect($mail, $password, $verify=false){//:boolean|void
 					session_start();
 				}
 			$_SESSION['auth'] = false;
-			header('location: login.php');
+			header('location: ?p=login');
 			//TODO : err pas connecté
 		}
 
