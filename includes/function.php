@@ -26,7 +26,7 @@ function uri($cible="")//:string
 function getDB(	$dbuser='root', 
 				$dbpassword='', 
 				$dbhost='localhost',
-				$dbname='sitebeer') //:\PDO
+				$dbname='dylan_beer') //:\PDO
 {
 	
 
@@ -126,7 +126,7 @@ function userOnly($verify=false){//:array|void|boolean
 		session_start();
 	}
 	// est pas defini et false
-	if(!$_SESSION["auth"]){
+	if(empty($_SESSION["auth"])){
 		if($verify){
 			return false;
 		//exit();

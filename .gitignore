@@ -1,2 +1,4 @@
 config.php
 ressources/lock.php
+vendor/
+mail.php
