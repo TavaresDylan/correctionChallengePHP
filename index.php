@@ -1,7 +1,6 @@
 <?php 
 require_once 'includes/function.php';
 
-
 if(!empty($_POST)){
 	require 'userAction.php';
 }

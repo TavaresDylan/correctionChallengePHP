@@ -1,13 +1,6 @@
 config.php
 ressources/lock.php
-<<<<<<< HEAD
 vendor/
-=======
-vendor/
-
-
-
-
 
 # Global GIT ignored files
 
@@ -30,4 +23,3 @@ xcuserdata/
 
 # Textmate project file
 *.tmproj
->>>>>>> 302d10c1ad7271683694c42f7678b82c8be8efe3

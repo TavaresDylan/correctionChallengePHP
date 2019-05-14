@@ -2,7 +2,6 @@
 require_once 'vendor/autoload.php';
 require_once 'config.php';
 date_default_timezone_set('Europe/Paris') ;
-
 /**
 * retourne le nom du dossier
 *
@@ -11,52 +10,42 @@ date_default_timezone_set('Europe/Paris') ;
 function uri($cible="")//:string
 {
 	global $racine; //Permet de récupérer une variable externe à la fonction
-	$uri = $_SERVER['HTTP_X_FORWARDED_PROTO']."://".$_SERVER['HTTP_HOST']; 
+	$uri = "http://".$_SERVER['HTTP_HOST']; 
 	$folder = "";
 	if(!$racine) {
 		$folder = basename(dirname(dirname(__FILE__))).'/'; //Dossier courant
 	}
 	return $uri.'/'.$folder.$cible;
 }
-
-
 /**
 * crée une connexion à la base de données
 *	@return \PDO
 */
-
 function getDB(	$dbuser='root', 
 				$dbpassword='', 
 				$dbhost='localhost',
-				$dbname='dylan_beer') //:\PDO
+				$dbname='sitebeer') //:\PDO
 {
 	
-
 	$dsn = 'mysql:dbname='.$dbname.';host='.$dbhost.';charset=UTF8';
 	try {
     	$pdo = new PDO($dsn, $dbuser, $dbpassword);
-
     	//definit mode de recupération en mode tableau associatif
     	// $user["lastname"];
     	$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-
     	//definit mode de recupération en mode Objet
     	//$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
     	// $user->lastname;
     	return $pdo;
-
 	} catch (PDOException $e) {
     	echo 'Connexion échouée : ' . $e->getMessage();
     	die();
 	}
 }
-
-
 /**
 *	génère un champ de formulaire de type input
 *	@return String
 */
-
 function input($name, $label,$value="", $type='text', $require=true)//:string
 {
 	$input = "<div class=\"form-group\"><label for=\"".
@@ -66,20 +55,16 @@ function input($name, $label,$value="", $type='text', $require=true)//:string
 	"\" name=\"".$name."\" value=\"".$value."\" ";
 	$input .= ($require)? "required": "";
 	$input .= "></div>";
-
 	return $input;
 }
-
 /**
 * Connect le client
 * @return boolean|void
 */
 function userConnect($mail, $password, $verify=false){//:boolean|void
 	require 'config.php';
-
 	$sql = "SELECT * FROM users WHERE `mail`= ?";
 	$pdo = getDB($dbuser, $dbpassword, $dbhost,$dbname);
-
 		$statement = $pdo->prepare($sql);
 		$statement->execute([htmlspecialchars($mail)]);
 		$user = $statement->fetch();
@@ -91,7 +76,6 @@ function userConnect($mail, $password, $verify=false){//:boolean|void
 					return true;
 					//exit();
 				}
-
 				if (session_status() != PHP_SESSION_ACTIVE){
 					session_start();
 				}
@@ -100,9 +84,7 @@ function userConnect($mail, $password, $verify=false){//:boolean|void
 				//connecté
 				header('location: profil.php');
 				exit();
-
 		}else{
-
 			if($verify){
 				return false;
 				//exit();
@@ -114,11 +96,7 @@ function userConnect($mail, $password, $verify=false){//:boolean|void
 			header('location: ?p=login');
 			//TODO : err pas connecté
 		}
-
 }
-
-
-
 /**
 * verifie que l'utilisateur est connecté
 * @return array|void
@@ -133,29 +111,11 @@ function userOnly($verify=false){//:array|void|boolean
 			return false;
 		//exit();
 		}
-		header('location: login.php');
+		header('location: ?=login.php');
 		exit();
 	}
 	return $_SESSION["auth"];
 }
-
-//SwiftMailer
-require_once 'vendor/autoload.php';
-function envoiMail($objet, $mailcible, $messageBody, $cci = true){
-	require 'config.php';
-
-	$transport = (new Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl'))
-  ->setUsername($mailaddress)
-  ->setPassword($mailpassword);
-  
-	$mailer = new Swift_Mailer($transport);
-
-<<<<<<< HEAD
-	$message = (new Swift_Message($objet))
-  ->setFrom([$mailaddress => 'Dydy'])
-  ->setBcc($mailcible)
-  ->setBody($messageBody);
-=======
 /**
 * envoie un email
 * @return string
@@ -166,16 +126,12 @@ function envoiMail($objet, $mailto, $msg, $cci = true)//:string
 	if(!is_array($mailto)){
 		$mailto = [ $mailto ];
 	}
-
-
 	// Create the Transport
 	$transport = (new Swift_SmtpTransport('smtp.gmail.com', 587, 'tls'))
 	->setUsername($defaultmail)
 	->setPassword($mailpwd);
-
 	// Create the Mailer using your created Transport
 	$mailer = new Swift_Mailer($transport);
-
 	// Create a message
 	$message = (new Swift_Message($objet))
 		->setFrom([$defaultmail]);
@@ -184,27 +140,18 @@ function envoiMail($objet, $mailto, $msg, $cci = true)//:string
 	}else{
 		$message->setto($mailto);
 	}
-
 	if(is_array($msg) && array_key_exists("html", $msg) && array_key_exists("text", $msg))
 	{
-
 		$message->setBody($msg["html"], 'text/html');
 		// Add alternative parts with addPart()
 		$message->addPart($msg["text"], 'text/plain');
-
 	}else if(is_array($msg) && array_key_exists("html", $msg) ){
-
 		$message->setBody($msg["html"], 'text/html');
 		$message->addPart($msg["html"], 'text/plain');
-
 	}else if(is_array($msg) && array_key_exists("text", $msg)){
-
 		$message->setBody($msg["text"], 'text/plain');
-
 	}else if(is_array($msg)){
-
 		die('erreur une clé n\'est pas bonne'); 
-
 	}else{
 		$message->setBody($msg, 'text/plain');
 	}
@@ -212,14 +159,3 @@ function envoiMail($objet, $mailto, $msg, $cci = true)//:string
 	// Send the message
 	return $mailer->send($message);
 }
->>>>>>> 302d10c1ad7271683694c42f7678b82c8be8efe3
-
-  $result = $mailer->send($message);
-}
-
-
-/* Si un seul mail faire cc
-sinon faire cci
-*/
-
-
