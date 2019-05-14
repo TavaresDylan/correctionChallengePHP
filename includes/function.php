@@ -1,5 +1,7 @@
 <?php
+require_once 'vendor/autoload.php';
 require_once 'config.php';
+date_default_timezone_set('Europe/Paris') ;
 
 /**
 * retourne le nom du dossier
@@ -9,7 +11,7 @@ require_once 'config.php';
 function uri($cible="")//:string
 {
 	global $racine; //Permet de récupérer une variable externe à la fonction
-	$uri = "http://".$_SERVER['HTTP_HOST']; 
+	$uri = $_SERVER['HTTP_X_FORWARDED_PROTO']."://".$_SERVER['HTTP_HOST']; 
 	$folder = "";
 	if(!$racine) {
 		$folder = basename(dirname(dirname(__FILE__))).'/'; //Dossier courant
@@ -109,7 +111,7 @@ function userConnect($mail, $password, $verify=false){//:boolean|void
 					session_start();
 				}
 			$_SESSION['auth'] = false;
-			header('location: login.php');
+			header('location: ?p=login');
 			//TODO : err pas connecté
 		}
 
@@ -148,10 +150,69 @@ function envoiMail($objet, $mailcible, $messageBody, $cci = true){
   
 	$mailer = new Swift_Mailer($transport);
 
+<<<<<<< HEAD
 	$message = (new Swift_Message($objet))
   ->setFrom([$mailaddress => 'Dydy'])
   ->setBcc($mailcible)
   ->setBody($messageBody);
+=======
+/**
+* envoie un email
+* @return string
+*/
+function envoiMail($objet, $mailto, $msg, $cci = true)//:string
+{
+	require 'config.php';
+	if(!is_array($mailto)){
+		$mailto = [ $mailto ];
+	}
+
+
+	// Create the Transport
+	$transport = (new Swift_SmtpTransport('smtp.gmail.com', 587, 'tls'))
+	->setUsername($defaultmail)
+	->setPassword($mailpwd);
+
+	// Create the Mailer using your created Transport
+	$mailer = new Swift_Mailer($transport);
+
+	// Create a message
+	$message = (new Swift_Message($objet))
+		->setFrom([$defaultmail]);
+	if ($cci){
+		$message->setBcc($mailto);
+	}else{
+		$message->setto($mailto);
+	}
+
+	if(is_array($msg) && array_key_exists("html", $msg) && array_key_exists("text", $msg))
+	{
+
+		$message->setBody($msg["html"], 'text/html');
+		// Add alternative parts with addPart()
+		$message->addPart($msg["text"], 'text/plain');
+
+	}else if(is_array($msg) && array_key_exists("html", $msg) ){
+
+		$message->setBody($msg["html"], 'text/html');
+		$message->addPart($msg["html"], 'text/plain');
+
+	}else if(is_array($msg) && array_key_exists("text", $msg)){
+
+		$message->setBody($msg["text"], 'text/plain');
+
+	}else if(is_array($msg)){
+
+		die('erreur une clé n\'est pas bonne'); 
+
+	}else{
+		$message->setBody($msg, 'text/plain');
+	}
+	
+	// Send the message
+	return $mailer->send($message);
+}
+>>>>>>> 302d10c1ad7271683694c42f7678b82c8be8efe3
 
   $result = $mailer->send($message);
 }

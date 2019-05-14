@@ -2,4 +2,8 @@
     "require": {
         "swiftmailer/swiftmailer": "5.4.12"
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 302d10c1ad7271683694c42f7678b82c8be8efe3

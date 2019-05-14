@@ -1,3 +1,33 @@
 config.php
 ressources/lock.php
+<<<<<<< HEAD
 vendor/
+=======
+vendor/
+
+
+
+
+
+# Global GIT ignored files
+
+# Ignore X-code files
+build/
+*~.nib
+*.so
+*.pbxuser
+*.mode*
+*.perspective*
+# Xcode 4
+project.xcworkspace/
+xcuserdata/
+
+# UI Automation Test files
+*.trace
+
+# OSX Specific files
+.DS_Store
+
+# Textmate project file
+*.tmproj
+>>>>>>> 302d10c1ad7271683694c42f7678b82c8be8efe3
