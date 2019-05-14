@@ -1,12 +1,11 @@
 <?php
-$test = 'test';
+require_once 'includes/function.php';
 
-var_dump($test);
 
-function bidon()
-{
-	global $test;
-	var_dump($test);
-}
+echo envoiMail(  "coucou",
+            ["contact@apprendre.co", "julien@apprendre.co"],
+            ["html" => "<a href=#>c'est trop cool</a>", "text"=> "c'est trop cool"]
+          );
 
-bidon();
+
+

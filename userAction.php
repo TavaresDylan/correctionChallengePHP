@@ -1,18 +1,5 @@
 <?php
-require_once 'includes/function.php';
-
-
-// foreach ($_POST as $key => $value) {
-// 	$$key = $value;
-//  c'est égale a :
-//  $lastname = $value;
-// }
-
-
-
-
-
-if(!empty($_POST)){
+//inscription
 	if(	isset($_POST["lastname"]) && !empty($_POST["lastname"]) &&
 		isset($_POST["firstname"]) && !empty($_POST["firstname"]) &&
 		isset($_POST["address"]) && !empty($_POST["address"]) &&
@@ -79,35 +66,25 @@ if(!empty($_POST)){
 				userConnect($_POST["mail"], $_POST["password"]);
 			}
 		}//fin verification mail et password
+	// connexion
+	}else if(isset($_POST["mail"]) && !empty($_POST["mail"]) &&
+		isset($_POST["password"]) && !empty($_POST["password"]) &&
+		isset($_POST["robot"]) && empty($_POST["robot"])//protection robot
+	){
 
-	}else{//fin champ tous définis
-		die('bac a sable');//securisation
+		userConnect($_POST["mail"], $_POST["password"]);
+
+
+
+	}else if(isset($_POST["mail"]) && !empty($_POST["mail"])){
+		//verifier que user exite
+		//die("envoyer mail reset");
+	
+	// si rien
+	}else{
+		die('bac à sable');
 	}
 
-}// fin if post
-
-
-
-
-//debut html
-require 'includes/header.php';
-
-echo 	'<h1>Inscription</h1>'.
-		'<form method="POST" name="inscription" action="">'.
- 		input("lastname", "votre nom","").
- 		input("firstname", "votre prénom","").
- 		input("address", "votre adresse","").
- 		input("zipCode", "votre code postal","").
- 		input("city", "votre ville","").
- 		input("country", "votre pays","").
- 		input("phone", "votre numéro de portable","", "tel").
-  		input("mail", "votre courriel","", "email").
-  		input("mailVerify", "vérification de votre courriel","", "email").
-  		input("password", "votre mot de passe","", "password").
-  		input("passwordVerify", "confirmez votre mot de passe","", "password").
-  		input("robot", "","", "hidden").
-  		"<button type=\"submit\">Envoyez</button>".
-  		'</form>';
 
 
 
@@ -117,7 +94,9 @@ echo 	'<h1>Inscription</h1>'.
 
 
 
-require 'includes/footer.php';
+
+
+
 
 
 

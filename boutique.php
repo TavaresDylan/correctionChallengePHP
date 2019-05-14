@@ -1,6 +1,5 @@
 <?php
 	require_once('ressources/donnees.php');
-	include 'includes/header.php';
 ?>
 
 <h1 class="titreduhaut">Nos Produits</h1>
@@ -14,6 +13,3 @@
 		</article>
 	<?php endforeach; ?>
 </section>
-
-<?php
-	include 'includes/footer.php'; 
