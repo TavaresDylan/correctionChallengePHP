@@ -22,6 +22,8 @@ if ($page == 'login'){
 	  		input("password", "votre mot de passe","", "password").
 	  		input("passwordVerify", "confirmez votre mot de passe","", "password");
 
+}else if ($page == 'validation.php'){
+	echo 'Pour activer votre compte, veuillez cliquer sur le lien qui vous à été envoyer par mail';
 }
 
 	echo input("robot", "","", "hidden");

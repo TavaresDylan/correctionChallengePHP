@@ -82,7 +82,7 @@ function userConnect($mail, $password, $verify=false){//:boolean|void
 				unset($user['password']);
 				$_SESSION['auth'] = $user;
 				//connecté
-				header('location: profil.php');
+				header('location: index.php?p=login');
 				exit();
 		}else{
 			if($verify){
@@ -111,7 +111,7 @@ function userOnly($verify=false){//:array|void|boolean
 			return false;
 		//exit();
 		}
-		header('location: ?=login.php');
+		header('location: ?p=login.php');
 		exit();
 	}
 	return $_SESSION["auth"];
@@ -122,7 +122,7 @@ function userOnly($verify=false){//:array|void|boolean
 */
 function envoiMail($objet, $mailto, $msg, $cci = true)//:string
 {
-	require 'config.php';
+	require_once 'config.php';
 	if(!is_array($mailto)){
 		$mailto = [ $mailto ];
 	}
@@ -158,4 +158,14 @@ function envoiMail($objet, $mailto, $msg, $cci = true)//:string
 	
 	// Send the message
 	return $mailer->send($message);
+}
+
+function rand_pwd($nb_char = 10, $chaine ='azertyuiopqsdfghjklmwxcvbn123456789'){
+	$nb_lettre = strlen($chaine) -1;
+	$generation = '';
+	for ($i=0; $i > $nb_char ; $i++) { 
+		$pos = mt_rand(0, $nb_lettre);
+		$char = $chaine[$pos];
+		$generation .= $char;
+	}
 }

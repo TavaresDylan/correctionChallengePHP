@@ -32,8 +32,11 @@
 			$user = $statement->fetch();
 		
 			if(!$user){
+				$token = rand_pwd(24);
+				return $token;
+				echo($token);
 				$password = password_hash(htmlspecialchars($_POST["password"]), PASSWORD_BCRYPT);
-				$sql = "INSERT INTO `users` (`lastname`, `firstname`, `address`, `zipCode`, `city`, `country`, `phone`, `mail`, `password`) VALUES (
+				$sql = "INSERT INTO `users` (`lastname`, `firstname`, `address`, `zipCode`, `city`, `country`, `phone`, `mail`, `password`, `token`) VALUES (
 				 :lastname,				 
 				 :firstname,
 				 :address,
@@ -42,7 +45,8 @@
 				 :country,
 				 :phone,
 				 :mail,
-				 :password)
+				 :password,
+				 :token)
 				 ";
 				$statement = $pdo->prepare($sql);
 				$result = $statement->execute([
@@ -54,10 +58,25 @@
 					":country"		=> htmlspecialchars($_POST["country"]),
 					":phone"		=> htmlspecialchars($_POST["phone"]),
 					":mail"			=> htmlspecialchars($_POST["mail"]),
-					":password"		=> $password
+					":password"		=> $password,
+					":token"		=> $cle
 				]);
 				if($result){
-					userConnect($_POST["mail"], $_POST["password"]);
+					require_once 'includes/function.php';
+					echo envoiMail(  "Activer votre compte",
+            		[$_POST["mail"], $_POST["mail"]],
+            		["html" => "", "text"=> "Bienvenue sur Bread Beer,
+ 
+Pour activer votre compte, veuillez cliquer sur le lien ci dessous
+ou copier/coller dans votre navigateur internet.
+ 
+http://localhost/correctionChallengePHP/index.php?log=".urlencode($_POST["mail"])."&token=".urlencode($cle)."
+ 
+ 
+---------------
+Ceci est un mail automatique, Merci de ne pas y répondre."]
+          			);
+          			
 				}else{
 					die("pas ok");
 					//TODO : signaler erreur
@@ -73,8 +92,6 @@
 	){
 
 		userConnect($_POST["mail"], $_POST["password"]);
-
-
 
 	}else if(isset($_POST["mail"]) && !empty($_POST["mail"])){
 		//verifier que user exite
